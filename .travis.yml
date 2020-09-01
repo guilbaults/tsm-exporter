@@ -18,3 +18,13 @@ before_install:
 script:
 - flake8 tsm-exporter.py
 - docker run -v ${PWD}:/sources -v ${PWD}:/output:Z ${DOCKER_IMAGE}:${OS_TYPE}-${OS_VERSION}
+deploy:
+  provider: releases
+  api_key:
+    secure: TVyP0gApJiGEiUzWZk70LYmIsehYbxqQ6GIQ3WmS+QMryYGUpcZW0heut3vfpcHnRr1TKXs2GimsfROn7pHTON/a2sljFsgZcUgremP60Htui5cQlldelgTuDRJOjaVIdJX8IcTtKzZaDXeRhXFjF2wH0tBn0LeWaY0v40vgLP/8AMrIS2psJIAc5ZEc9j+x0bIBDVqU9n9j+Pjv2jP+qcGQXTRRP5u671TRSR7bXPJP2j5KvBWvu0l5eTA16YvRCQ7I6lQSB7KvE7hqyFtg0WfQ0SgYzgzg1mfVEnOZqI8dOs5HoBRejtxdqcmW/9zzZ5j8v0d4v63iy5JnGdr8iwzS2DZzg0SJJV8dd0CihNYkqsOhRFlbIG5/ifEqhybU2Y2ibjVyc5NJE4hJ5W/mMpo+wJcBVf2rd6oIOvsfwhOjiQdWqdowwmGbsTprXP+E5AXtXfQU6g/hnCWIa8ovQRhE44icz8dSaDF0Tm789bSdWAoSGZFcukijPp7BIQHpHKLGL2FOABBmC/uKt8Z6vsO63UB997pZ/SF5ZclKFKSpY1DoEYpLuc9IaiLqYb1opY0ZYyDq5mC56Xvzbh9iFQGWU0Ux19VOc2HX8jG/esEqwDzcRnSOjpTCFyHNDddd9VqvWkRSfsr6lfiW2XYQc0ZZmZ/cohh40WJEk/x1ynU=
+  file: "*.rpm"
+  draft: true
+  file_glob: true
+  skip_cleanup: true
+  on:
+    tags: true
