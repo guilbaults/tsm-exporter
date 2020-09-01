@@ -1,0 +1,8 @@
+[tsm]
+username=admin
+password=changeme
+url=https://tsm-controlcenter:11090
+servers=TSM-SERVER01,TSM-SERVER02
+
+[exporter]
+port=8083

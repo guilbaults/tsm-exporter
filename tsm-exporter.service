@@ -1,0 +1,13 @@
+[Unit]
+Description=TSM-exporter
+After=network.target
+
+[Service]
+Type=simple
+EnvironmentFile=-/etc/sysconfig/tsm-exporter.conf
+ExecStart=/usr/bin/tsm-exporter
+PIDFile=/var/run/tsm-exporter.pid
+KillMode=process
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,20 @@
+language: python
+sudo: required
+cache: pip
+python:
+- '3.6'
+fail_fast: true
+env:
+  global:
+  - DOCKER_IMAGE=alectolytic/rpmbuilder
+  - OS_ARCH=x86_64
+  matrix:
+  - OS_TYPE=centos OS_DIST=epel OS_VERSION=7
+services:
+- docker
+install: true
+before_install:
+- pip install flake8
+script:
+- flake8 tsm-exporter.py
+- docker run -v ${PWD}:/sources -v ${PWD}:/output:Z ${DOCKER_IMAGE}:${OS_TYPE}-${OS_VERSION}
