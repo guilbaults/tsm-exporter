@@ -1,6 +1,6 @@
 import requests
 import json
-import argparse
+import os
 import time
 import ConfigParser
 
@@ -78,13 +78,12 @@ class TSMCollector(object):
 
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(
-        description='Prometheus collector for TSM stats')
-    parser.add_argument("config", type=str, help="Config file path")
-    args = parser.parse_args()
-
+    if 'CONFIG' in os.environ:
+        config_path = os.environ['CONFIG']
+    else:
+        config_path = 'config.ini'
     config = ConfigParser.ConfigParser()
-    config.read(args.config)
+    config.read(config_path)
 
     tsm = IBM_API(
         (config.get('tsm', 'username'), config.get('tsm', 'password')),

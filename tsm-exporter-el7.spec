@@ -1,6 +1,6 @@
 Name:	  tsm-exporter
-Version:  0.0.1
-%global gittag 0.0.1
+Version:  0.0.2
+%global gittag 0.0.2
 Release:  1%{?dist}
 Summary:  Prometheus exporter for IBM Spectrum Protect
 
@@ -37,5 +37,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_unitdir}/tsm-exporter.service
 
 %changelog
+* Tue Sep 1 2020 Simon Guilbault <simon.guilbault@calculquebec.ca> 0.0.2-1
+- Using config file from ENV vars
 * Tue Sep 1 2020 Simon Guilbault <simon.guilbault@calculquebec.ca> 0.0.1-1
 - Initial release
