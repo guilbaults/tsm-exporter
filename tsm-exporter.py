@@ -2,7 +2,7 @@ import requests
 import json
 import os
 import time
-import ConfigParser
+import configparser
 import xml.etree.ElementTree as ET
 
 from prometheus_client.core import REGISTRY, GaugeMetricFamily
@@ -10,9 +10,10 @@ from prometheus_client import start_http_server
 
 
 class IBM_API:
-    def __init__(self, auth, control_center_url):
+    def __init__(self, auth, control_center_url, verify=True):
         self.auth = auth
         self.control_center_url = control_center_url
+        self.verify = verify
 
     def fix_ibm_api(self, hdr, items_json):
         headers = {}
@@ -33,7 +34,7 @@ class IBM_API:
                           self.control_center_url, server_name),
                           data=q_string,
                           auth=self.auth,
-                          verify=False,
+                          verify=self.verify,
                           headers={'OC-API-VERSION': '1.0',
                                    'content-type': 'text/plain'})
 
@@ -44,7 +45,7 @@ class IBM_API:
         r = requests.get('{}/oc/api/{}'.format(
                          self.control_center_url, url),
                          auth=self.auth,
-                         verify=False,
+                         verify=self.verify,
                          headers={'OC-API-VERSION': '1.0',
                                   'content-type': 'text/plain'})
         return ET.fromstring(r.text)
@@ -112,12 +113,19 @@ if __name__ == '__main__':
         config_path = os.environ['CONFIG']
     else:
         config_path = 'config.ini'
-    config = ConfigParser.ConfigParser()
+    config = configparser.ConfigParser()
     config.read(config_path)
+
+    if config.get('tsm', 'insecure') == 'true':
+        verify = False
+        import urllib3
+        urllib3.disable_warnings()
+    else:
+        verify = True
 
     tsm = IBM_API(
         (config.get('tsm', 'username'), config.get('tsm', 'password')),
-        config.get('tsm', 'url'))
+        config.get('tsm', 'url'), verify)
 
     start_http_server(int(config.get('exporter', 'port')))
     REGISTRY.register(TSMCollector(config.get('tsm', 'servers').split(',')))
